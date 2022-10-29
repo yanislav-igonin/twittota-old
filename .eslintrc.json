@@ -1,0 +1,15 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "semi": "error",
+    "eol-last": "error",
+    "quotes": ["error", "single"],
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "never"],
+    "space-in-parens": ["error", "never"],
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "space-before-blocks": ["error", "always"],
+    "key-spacing": ["error", { "beforeColon": false, "afterColon": true }],
+    "comma-dangle": ["error", "always-multiline"]
+  }
+}
