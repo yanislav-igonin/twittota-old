@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Session } from '@prisma/client';
 import { compare } from '@lib/passwords';
 import { t } from '@trpc-server';
-import { InvalidEmailOrPasswordError } from '@lib/errors';
+import { InvalidEmailOrPasswordError, UnauthorizedError } from '@lib/errors';
 import { authMiddleware } from '@middlewares';
 import { OkResponse } from '@lib/responses';
 
@@ -49,5 +49,17 @@ export const authRouter = t.router({
     });
     res.setHeader('Set-Cookie', 'sid=; Path=/; HttpOnly; Max-Age=0');
     return new OkResponse();
+  }),
+  me: t.procedure.use(authMiddleware).query(async ({
+    ctx: { db, session },
+  }) => {
+    const user = await db.user.findFirst({
+      where: { id: session.userId },
+      select: { email: true },
+    });
+    if (!user) {
+      throw new UnauthorizedError();
+    }
+    return { email: user.email };
   }),
 });
