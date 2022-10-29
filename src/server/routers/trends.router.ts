@@ -2,9 +2,28 @@ import { z } from 'zod';
 import { t } from '@trpc-server';
 import { authMiddleware } from '@middlewares';
 
+const defaultKeywords = [
+  'apple',
+  '"$aapl"',
+  'microsoft',
+  '"$msft"',
+  'google',
+  '"$goog"',
+  'netflix',
+  '"$nflx"',
+  'amazon',
+  '"$amzn"',
+  'meta',
+  '"$meta"',
+  'bitcoin',
+  '"$btc"',
+  'ethereum',
+  '"$eth"',
+];
+
 export const trendsRouter = t.router({
   getByKeywords: t.procedure.use(authMiddleware).input(z.object({
-    keywords: z.array(z.string()).default(['apple', 'microsoft', 'google', 'netflix', 'amazon']),
+    keywords: z.array(z.string()).default(defaultKeywords),
     granularity: z.enum(['minute', 'hour', 'day']).default('hour'),
   })).query(async ({ input, ctx: { twitter } }) => {
     const { keywords, granularity } = input;
