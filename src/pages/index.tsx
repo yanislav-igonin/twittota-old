@@ -24,7 +24,7 @@ export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => 
 };
 
 const Home: NextPage = () => {
-
+  const { data } = trpc.trends.getByKeywords.useQuery({});
   return <Layout>
     <Head>
       <title>Twittota</title>
@@ -35,7 +35,9 @@ const Home: NextPage = () => {
     </div>
 
     <main className="">
-
+      {data
+        ? data.map((trend) => JSON.stringify(trend))
+        : <div>Loading...</div>}
     </main>
   </Layout>;
 };
