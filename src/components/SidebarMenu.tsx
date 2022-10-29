@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { HomeIcon, UsersIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/solid';
+import { HomeIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { trpc } from '@lib/trpc';
@@ -13,8 +13,6 @@ type LinkProps = {
 export const SidebarMenu = () => {
   const links: LinkProps[] = [
     { href: '/', label: 'Home', icon: <HomeIcon fill='white' /> },
-    { href: '/users', label: 'Users', icon: <UsersIcon fill='white' /> },
-    { href: '/users-ssr', label: 'Users SSR', icon: <UsersIcon fill='white' /> },
   ];
   const router = useRouter();
   const currentPath = router.pathname;
