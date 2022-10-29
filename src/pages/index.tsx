@@ -29,6 +29,8 @@ export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => 
 const darkThemeStroke = 'rgb(248 250 252)';
 const lightThemeStroke = '#8884d8';
 
+const removeDoubleQuotes = (str: string) => str.replace(/"/g, '');
+
 const Home: NextPage = () => {
   const [theme] = useDarkMode();
   const firstRenderStroke = theme === ThemeMode.Dark ? darkThemeStroke : lightThemeStroke;
@@ -53,7 +55,7 @@ const Home: NextPage = () => {
           return null;
         }
         return <div key={keyword} className="w-full mb-4">
-          <h1 className='dark:text-slate-50 font-medium text-2xl'>{keyword}</h1>
+          <h1 className='dark:text-slate-50 font-medium text-2xl'>{removeDoubleQuotes(keyword)}</h1>
           <LineChart width={width} height={400} data={trendData}>
             <Line type="monotone" dataKey="tweet_count" stroke={strokeColor} />
             <CartesianGrid stroke="#ccc" />
