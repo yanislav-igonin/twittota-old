@@ -46,11 +46,11 @@ const Home: NextPage = () => {
 
     {data
       ? data.map((trend) => {
-        const { keyword, data: trendData } = trend;
+        const { keyword, meta, data: trendData } = trend;
         if (!trendData) {
           return null;
         }
-        return <div key={keyword} className="w-full">
+        return <div key={keyword} className="w-full mb-4">
           <h1 className='dark:text-slate-50 font-medium text-2xl'>{keyword}</h1>
           <LineChart width={width} height={400} data={trendData}>
             <Line type="monotone" dataKey="tweet_count" stroke={strokeColor} />
@@ -63,6 +63,7 @@ const Home: NextPage = () => {
               tickFormatter={(v: string) => new Date(v).toLocaleDateString()} />
             <YAxis dataKey="tweet_count" stroke={strokeColor} />
           </LineChart>
+          <h1 className='dark:text-slate-50 font-medium text-2xl'>Total tweets count for period: {meta?.total_tweet_count}</h1>
         </div>;
       })
       : <div>Loading...</div>}
