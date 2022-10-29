@@ -25,6 +25,7 @@
       "@responses": ["lib/responses"],
       // server
       "@db": ["server/db/client"],
+      "@twitter": ["server/twitter"],
       "@routers": ["server/routers"],
       "@middlewares": ["server/middlewares"],
       "@trpc-server": ["server/trpc"],
