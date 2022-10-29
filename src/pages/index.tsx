@@ -44,12 +44,10 @@ const Home: NextPage = () => {
           <LineChart width={width} height={400} data={trendData}>
             <Line type="monotone" dataKey="tweet_count" stroke="#8884d8" />
             <CartesianGrid stroke="#ccc" />
-            <Tooltip />
+            <Tooltip labelFormatter={(v: string) => new Date(v).toLocaleString()} />
             <XAxis dataKey="start"
-              angle={45}
-              // interval={24}
-              tickCount={7}
-              interval="preserveEnd"
+              angle={20}
+              interval={24}
               tickFormatter={(v: string) => new Date(v).toLocaleDateString()} />
             <YAxis dataKey="tweet_count" />
           </LineChart>
