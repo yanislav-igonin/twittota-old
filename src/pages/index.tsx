@@ -1,6 +1,7 @@
 import type { GetServerSidePropsContext, NextPage } from 'next';
 import Head from 'next/head';
-import { DarkModeButton, Layout } from '@components';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { Layout } from '@components';
 import { db } from '@db';
 import { trpc } from '@lib/trpc';
 
@@ -25,20 +26,36 @@ export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => 
 
 const Home: NextPage = () => {
   const { data } = trpc.trends.getByKeywords.useQuery({});
+  // get window width from brower
+  const width = typeof window !== 'undefined' ? window.innerWidth - 48 - 16 - 16 : 1000;
   return <Layout>
     <Head>
-      <title>Twittota</title>
+      <title>Trends</title>
     </Head>
 
-    <div className="absolute top-0 right-0 p-2">
-      <DarkModeButton />
-    </div>
-
-    <main className="">
-      {data
-        ? data.map((trend) => JSON.stringify(trend))
-        : <div>Loading...</div>}
-    </main>
+    {data
+      ? data.map((trend) => {
+        const { keyword, data: trendData } = trend;
+        if (!trendData) {
+          return null;
+        }
+        return <div key={keyword} className="w-full">
+          <h1 className='dark:text-slate-50 font-medium text-2xl'>{keyword}</h1>
+          <LineChart width={width} height={400} data={trendData}>
+            <Line type="monotone" dataKey="tweet_count" stroke="#8884d8" />
+            <CartesianGrid stroke="#ccc" />
+            <Tooltip />
+            <XAxis dataKey="start"
+              angle={45}
+              // interval={24}
+              tickCount={7}
+              interval="preserveEnd"
+              tickFormatter={(v: string) => new Date(v).toLocaleDateString()} />
+            <YAxis dataKey="tweet_count" />
+          </LineChart>
+        </div>;
+      })
+      : <div>Loading...</div>}
   </Layout>;
 };
 

@@ -4,7 +4,7 @@ import { authMiddleware } from '@middlewares';
 
 export const trendsRouter = t.router({
   getByKeywords: t.procedure.use(authMiddleware).input(z.object({
-    keywords: z.array(z.string()).default(['apple', 'microsoft', 'google', 'netflix', 'amazon', 'twitter']),
+    keywords: z.array(z.string()).default(['apple', 'microsoft', 'google', 'netflix', 'amazon']),
     granularity: z.enum(['minute', 'hour', 'day']).default('hour'),
   })).query(async ({ input, ctx: { twitter } }) => {
     const { keywords, granularity } = input;
