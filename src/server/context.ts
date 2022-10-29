@@ -3,12 +3,15 @@ import * as trpcNext from '@trpc/server/adapters/next';
 import type { PrismaClient, Session } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '@db';
+import type { Client as TwitterClient } from 'twitter-api-sdk';
+import { client as twitter } from '@twitter';
 
 type CreateContextOptions = {
   req: NextApiRequest;
   res: NextApiResponse
   session: Session | null
   db: PrismaClient
+  twitter: TwitterClient
 }
 
 /**
@@ -31,5 +34,5 @@ export async function createContext(
   const { req, res } = opts;
   const sessionId = req.cookies.sid || '';
   const session = await db.session.findFirst({ where: { id: sessionId } });
-  return await createContextInner({ req, res, session, db  });
+  return await createContextInner({ req, res, session, db, twitter });
 }
