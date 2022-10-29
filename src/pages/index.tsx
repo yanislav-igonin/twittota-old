@@ -1,7 +1,7 @@
 import type { GetServerSidePropsContext, NextPage } from 'next';
 import Head from 'next/head';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
-import { Layout } from '@components';
+import { Layout, Spinner } from '@components';
 import { db } from '@db';
 import { trpc } from '@lib/trpc';
 import { ThemeMode, useDarkMode } from '@lib/hooks/useDarkMode';
@@ -25,8 +25,10 @@ export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => 
   }
   return { props: {} };
 };
+
 const darkThemeStroke = 'rgb(248 250 252)';
 const lightThemeStroke = '#8884d8';
+
 const Home: NextPage = () => {
   const [theme] = useDarkMode();
   const firstRenderStroke = theme === ThemeMode.Dark ? darkThemeStroke : lightThemeStroke;
@@ -66,7 +68,9 @@ const Home: NextPage = () => {
           <h1 className='dark:text-slate-50 font-medium text-2xl'>Total tweets count for period: {meta?.total_tweet_count}</h1>
         </div>;
       })
-      : <div>Loading...</div>}
+      : <div className='w-screen h-screen flex justify-center items-center'>
+        <Spinner width={40} height={40} />
+      </div>}
   </Layout>;
 };
 
