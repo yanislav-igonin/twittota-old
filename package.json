@@ -19,6 +19,7 @@
     "bcrypt": "^5.0.1",
     "next": "^13.0.0",
     "react": "^18.2.0",
+    "react-charts": "^3.0.0-beta.50",
     "react-dom": "^18.2.0",
     "recharts": "^2.1.16",
     "superjson": "^1.10.0",
