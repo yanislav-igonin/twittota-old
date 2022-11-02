@@ -1,11 +1,19 @@
 import type { GetServerSidePropsContext, NextPage } from 'next';
 import Head from 'next/head';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Layout, Spinner } from '@components';
 import { db } from '@db';
 import { trpc } from '@lib/trpc';
+import { useMemo } from 'react';
+import { AxisOptions } from 'react-charts';
+import { types } from 'twitter-api-sdk';
+import dynamic from 'next/dynamic';
 import { ThemeMode, useDarkMode } from '@lib/hooks/useDarkMode';
 import { useEffect, useState } from 'react';
+
+const Chart = dynamic(() => import('react-charts').then((mod) => mod.Chart), {
+  ssr: false,
+});
 
 const loginRedirect = {
   redirect: {
@@ -31,6 +39,41 @@ const lightThemeStroke = '#8884d8';
 
 const removeDoubleQuotes = (str: string) => str.replace(/"/g, '');
 
+type TweetsCountData = types.components['schemas']['SearchCount'];
+
+const MyChart = ({ series, label }: { series: TweetsCountData[], label: string }) => {
+
+  const data = [
+    {
+      label,
+      data: series,
+      dataType: 'time',
+    },
+  ];
+
+
+  const primaryAxis = useMemo((): AxisOptions<TweetsCountData> => ({
+    getValue: datum => new Date(datum.start),
+    scaleType: 'time',
+  }), []);
+
+  const secondaryAxes = useMemo((): AxisOptions<TweetsCountData>[] => [{
+    getValue: datum => datum.tweet_count,
+    elementType: 'line',
+  }], []);
+
+  return (
+    <Chart
+      options={{
+        data,
+        primaryAxis,
+        secondaryAxes,
+      }}
+    />
+  );
+};
+
+
 const Home: NextPage = () => {
   const [theme] = useDarkMode();
   const firstRenderStroke = theme === ThemeMode.Dark ? darkThemeStroke : lightThemeStroke;
@@ -42,7 +85,6 @@ const Home: NextPage = () => {
 
   const { data } = trpc.trends.getByKeywords.useQuery({});
   // get window width from brower
-  const width = typeof window !== 'undefined' ? window.innerWidth - 48 - 16 - 16 : 1000;
   return <Layout>
     <Head>
       <title>Trends</title>
@@ -56,17 +98,27 @@ const Home: NextPage = () => {
         }
         return <div key={keyword} className="w-full mb-4">
           <h1 className='dark:text-slate-50 font-medium text-2xl'>{removeDoubleQuotes(keyword)}</h1>
-          <LineChart width={width} height={400} data={trendData}>
-            <Line type="monotone" dataKey="tweet_count" stroke={strokeColor} />
-            <CartesianGrid stroke="#ccc" />
-            <Tooltip labelFormatter={(v: string) => new Date(v).toLocaleString()} />
-            <XAxis dataKey="start"
-              angle={20}
-              interval={24}
-              stroke={strokeColor}
-              tickFormatter={(v: string) => new Date(v).toLocaleDateString()} />
-            <YAxis dataKey="tweet_count" stroke={strokeColor} />
-          </LineChart>
+          <div className='w-full h-96'>
+            <MyChart series={trendData} label={removeDoubleQuotes(keyword)} />
+          </div>
+          
+          <div className='w-full h-96'>
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={trendData}>
+                <Line type="monotone" dataKey="tweet_count" stroke={strokeColor} strokeWidth={3} dot={false}/>
+                <CartesianGrid stroke="#ccc" />
+                <Tooltip labelFormatter={(v: string) => new Date(v).toLocaleString()} />
+                <XAxis dataKey="start"
+                  angle={20}
+                  interval={24}
+                  tickLine={false}
+                  stroke={strokeColor}
+                  tickFormatter={(v: string) => new Date(v).toLocaleDateString()} />
+                <YAxis 
+                dataKey="tweet_count" stroke={strokeColor} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
           <h1 className='dark:text-slate-50 font-medium text-2xl'>Total tweets count for period: {meta?.total_tweet_count}</h1>
         </div>;
       })
@@ -77,3 +129,4 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
