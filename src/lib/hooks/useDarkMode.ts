@@ -8,7 +8,7 @@ export enum ThemeMode {
 export const useDarkMode = () => {
   const isBrowser = typeof window !== 'undefined';
   const [theme, setTheme] = useState(
-    isBrowser ? localStorage.theme as ThemeMode : ThemeMode.Light
+    isBrowser ? localStorage.getItem('theme') as ThemeMode : ThemeMode.Light
   );
   const previousTheme = theme === ThemeMode.Dark ? ThemeMode.Light : ThemeMode.Dark;
 
