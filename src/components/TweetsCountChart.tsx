@@ -17,11 +17,11 @@ export const TweetsCountChart = ({ series, label }: { series: TweetsCountData[],
   }];
 
   const primaryAxis = useMemo((): AxisOptions<TweetsCountData> => ({
-    getValue: datum => new Date(datum.start) as unknown as Date,
+    getValue: datum => new Date(datum.start),
     scaleType: 'time',
   }), []);
   const secondaryAxes = useMemo((): AxisOptions<TweetsCountData>[] => [{
-    getValue: datum => datum.tweet_count as unknown,
+    getValue: datum => datum.tweet_count,
     elementType: 'line',
   }], []);
 
