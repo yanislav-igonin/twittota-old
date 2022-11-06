@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { AxisOptions } from 'react-charts';
+import { AxisOptions, ChartOptions, Chart as Shit } from 'react-charts';
 import { types } from 'twitter-api-sdk';
 import dynamic from 'next/dynamic';
 
-const Chart = dynamic(() => import('react-charts').then((mod) => mod.Chart), {
+const Chart = dynamic(() => import('react-charts').then((mod) => mod.Chart<TweetsCountData>), {
   ssr: false,
 });
 
@@ -29,9 +29,7 @@ export const TweetsCountChart = ({ series, label }: { series: TweetsCountData[],
     <Chart
       options={{
         data,
-        // @ts-ignore
         primaryAxis,
-        // @ts-ignore
         secondaryAxes,
       }}
     />
