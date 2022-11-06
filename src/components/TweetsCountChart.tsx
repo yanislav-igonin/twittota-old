@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { AxisOptions, ChartOptions, Chart as Shit } from 'react-charts';
+import { AxisOptions } from 'react-charts';
 import { types } from 'twitter-api-sdk';
 import dynamic from 'next/dynamic';
 
