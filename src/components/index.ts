@@ -6,3 +6,4 @@ export * from './Spinner';
 export * from './ErrorBoundary';
 export * from './SidebarMenu';
 export * from './Layout';
+export * from './LineChart';
