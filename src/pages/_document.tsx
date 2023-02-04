@@ -1,15 +1,24 @@
-import { Html, Head, Main, NextScript } from 'next/document';
+import { Head, Html, Main, NextScript } from 'next/document';
 
-const Document = () => <Html className="dark">
-  <Head>
-    <meta name="description" content="My NextJS Template" />
-    <link rel="icon" href="/favicon.ico" />
-  </Head>
-
-  <body>
-    <Main />
-    <NextScript />
-  </body>
-</Html>;
+const Document = () => {
+  return (
+    <Html className="dark">
+      <Head>
+        <meta
+          content="My NextJS Template"
+          name="description"
+        />
+        <link
+          href="/favicon.ico"
+          rel="icon"
+        />
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+};
 
 export default Document;

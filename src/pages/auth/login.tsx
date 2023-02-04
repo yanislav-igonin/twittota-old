@@ -1,12 +1,13 @@
-import { FC, PropsWithChildren, useState } from 'react';
-import { useRouter } from 'next/router';
-import { TRPCClientError } from '@trpc/client';
-import { NextPage } from 'next';
-import { trpc } from '@lib/trpc';
 import { Button, Input } from '@components';
+import { trpc } from '@lib/trpc';
+import { TRPCClientError } from '@trpc/client';
+import { type NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { type FC, type PropsWithChildren, useState } from 'react';
 
-const CredLabel: FC<PropsWithChildren> = ({ children }) =>
-  <span className='font-medium text-2xl'>{children}</span>;
+const CredLabel: FC<PropsWithChildren> = ({ children }) => {
+  return <span className="font-medium text-2xl">{children}</span>;
+};
 
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');
@@ -17,30 +18,60 @@ const Login: NextPage = () => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login.mutateAsync({ email, password });
+      await login.mutateAsync({
+        email,
+        password,
+      });
       router.push('/');
-    } catch (err) {
-      if (err instanceof TRPCClientError) {
-        console.log(err.message);
+    } catch (error) {
+      if (error instanceof TRPCClientError) {
+        console.log(error.message);
       }
     }
   };
 
-  return <div className='flex items-center justify-center h-screen'>
-    <form onSubmit={onSubmit} className='flex flex-col w-full px-4 md:w-1/4'>
-      <div className='m-1'>
-        <CredLabel>email: admin@admin.com</CredLabel>
-        <Input placeholder='Email' disabled={login.isLoading} type="email" value={email} onChange={e => setEmail(e.target.value)} />
-      </div>
-      <div className='m-1'>
-        <CredLabel>pass: 1234qwerA_</CredLabel>
-        <Input placeholder='Password' disabled={login.isLoading} type="password" value={password} onChange={e => setPassword(e.target.value)} />
-      </div>
-      <div className='m-1'>
-        <Button disabled={login.isLoading} loading={login.isLoading} type="submit">Login</Button>
-      </div>
-    </form>
-  </div>;
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <form
+        className="flex flex-col w-full px-4 md:w-1/4"
+        onSubmit={onSubmit}
+      >
+        <div className="m-1">
+          <CredLabel>email: admin@admin.com</CredLabel>
+          <Input
+            disabled={login.isLoading}
+            onChange={(e) => {
+              return setEmail(e.target.value);
+            }}
+            placeholder="Email"
+            type="email"
+            value={email}
+          />
+        </div>
+        <div className="m-1">
+          <CredLabel>pass: 1234qwerA_</CredLabel>
+          <Input
+            disabled={login.isLoading}
+            onChange={(e) => {
+              return setPassword(e.target.value);
+            }}
+            placeholder="Password"
+            type="password"
+            value={password}
+          />
+        </div>
+        <div className="m-1">
+          <Button
+            disabled={login.isLoading}
+            loading={login.isLoading}
+            type="submit"
+          >
+            Login
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default Login;

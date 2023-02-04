@@ -10,4 +10,6 @@ const { isProduction } = config;
 // Prevent multiple instances of Twitter Client in development
 export const client = global.twitter || new Client(config.twitter.bearerToken);
 
-if (isProduction) global.twitter = client;
+if (isProduction) {
+  global.twitter = client;
+}

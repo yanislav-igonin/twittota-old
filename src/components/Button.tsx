@@ -1,20 +1,28 @@
-import { ButtonHTMLAttributes, FC, HTMLInputTypeAttribute, ReactNode } from 'react';
 import { Spinner } from './Spinner';
+import {
+  type ButtonHTMLAttributes,
+  type FC,
+  HTMLInputTypeAttribute,
+  type ReactNode,
+} from 'react';
 
 type Props = {
   children: ReactNode;
-  onClick?: () => void;
-  type?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
   disabled?: boolean;
   loading?: boolean;
-}
+  onClick?: () => void;
+  type?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
+};
 export const Button: FC<Props> = ({
-  children, onClick, type='button', disabled = false, loading = false,
-}) => <button
-  onClick={onClick}
-  disabled={disabled || loading}
-  type={type}
-  className="
+  children,
+  onClick,
+  type = 'button',
+  disabled = false,
+  loading = false,
+}) => {
+  return (
+    <button
+      className="
     bg-rose-500
     hover:bg-rose-700
     text-white
@@ -22,6 +30,12 @@ export const Button: FC<Props> = ({
     rounded-md
     min-w-full
     p-2
-    ">
-  {!loading ? children : <Spinner/>}
-</button>;
+    "
+      disabled={disabled || loading}
+      onClick={onClick}
+      type={type}
+    >
+      {!loading ? children : <Spinner />}
+    </button>
+  );
+};

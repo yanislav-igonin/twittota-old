@@ -1,13 +1,14 @@
+import { config } from './config';
+import { type AppRouter } from '@routers';
 import { httpBatchLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import superjson from 'superjson';
-import type { AppRouter } from '@routers';
-import { config } from './config';
 
 const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
     return '';
   }
+
   // reference for vercel.com
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
@@ -24,8 +25,9 @@ export const trpc = createTRPCNext<AppRouter>({
         httpBatchLink({
           /**
            * If you want to use SSR, you need to use the server's full URL
+           *
            * @link https://trpc.io/docs/ssr
-           **/
+           */
           url: `${getBaseUrl()}/api/trpc`,
 
           // headers() {
@@ -47,16 +49,23 @@ export const trpc = createTRPCNext<AppRouter>({
           // },
         }),
       ],
-      transformer: superjson,
       /**
        * @link https://react-query-v3.tanstack.com/reference/QueryClient
-       **/
-      queryClientConfig: { defaultOptions: { queries: { refetchOnWindowFocus: false } } },
+       */
+      queryClientConfig: {
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
+        },
+      },
+
+      transformer: superjson,
     };
   },
   /**
    * @link https://trpc.io/docs/ssr
-   **/
+   */
   // ssr: true,
 });
 // => { useQuery: ..., useMutation: ...}

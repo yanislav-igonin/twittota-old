@@ -1,16 +1,17 @@
-import { Dispatch, useEffect, useState } from 'react';
+import { type Dispatch, useEffect, useState } from 'react';
 
 export enum ThemeMode {
-  Light = 'light',
   Dark = 'dark',
+  Light = 'light',
 }
 
 export const useDarkMode = () => {
   const isBrowser = typeof window !== 'undefined';
   const [theme, setTheme] = useState(
-    isBrowser ? localStorage.theme as ThemeMode : ThemeMode.Light
+    isBrowser ? (localStorage.theme as ThemeMode) : ThemeMode.Light,
   );
-  const previousTheme = theme === ThemeMode.Dark ? ThemeMode.Light : ThemeMode.Dark;
+  const previousTheme =
+    theme === ThemeMode.Dark ? ThemeMode.Light : ThemeMode.Dark;
 
   useEffect(() => {
     const root = window.document.documentElement;

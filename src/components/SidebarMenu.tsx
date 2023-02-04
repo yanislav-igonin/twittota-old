@@ -1,18 +1,22 @@
+import { ArrowRightOnRectangleIcon, HomeIcon } from '@heroicons/react/24/solid';
+import { trpc } from '@lib/trpc';
 import Link from 'next/link';
-import { HomeIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { trpc } from '@lib/trpc';
 
 type LinkProps = {
   href: string;
-  label: string;
   icon: JSX.Element;
-}
+  label: string;
+};
 
 export const SidebarMenu = () => {
   const links: LinkProps[] = [
-    { href: '/', label: 'Home', icon: <HomeIcon fill='white' /> },
+    {
+      href: '/',
+      icon: <HomeIcon fill="white" />,
+      label: 'Home',
+    },
   ];
   const router = useRouter();
   const currentPath = router.pathname;
@@ -23,34 +27,64 @@ export const SidebarMenu = () => {
     await router.push('/auth/login');
   };
 
-  return <nav className='flex flex-col h-screen bg-slate-800'>
-    {links.map((link) =>
-      <MenuLink key={link.href} {...link}
-        isActive={link.href === currentPath} />
-    )}
-    <div className='absolute bottom-0' onClick={onLogout} >
-      <LogoutMenuLink />
-    </div>
-  </nav>;
+  return (
+    <nav className="flex flex-col h-screen bg-slate-800">
+      {links.map((link) => {
+        return (
+          <MenuLink
+            key={link.href}
+            {...link}
+            isActive={link.href === currentPath}
+          />
+        );
+      })}
+      <div
+        className="absolute bottom-0"
+        onClick={onLogout}
+      >
+        <LogoutMenuLink />
+      </div>
+    </nav>
+  );
 };
 
 type MenuLinkProps = LinkProps & { isActive: boolean };
 
-const MenuLinkButton = (
-  { icon, isActive }: Pick<MenuLinkProps, 'icon' | 'isActive'>
-) => <button className={`
+const MenuLinkButton = ({
+  icon,
+  isActive,
+}: Pick<MenuLinkProps, 'icon' | 'isActive'>) => {
+  return (
+    <button
+      className={`
   text-lg
   p-2
   cursor-pointer
   w-12
   hover:bg-red-500
-  ${isActive ? 'bg-rose-500' : ''}`}>
-    {icon}
-  </button>;
+  ${isActive ? 'bg-rose-500' : ''}`}
+    >
+      {icon}
+    </button>
+  );
+};
 
-const MenuLink = ({ href, icon, isActive }: MenuLinkProps) => <Link href={href}>
-  <MenuLinkButton icon={icon} isActive={isActive} />
-</Link>;
+const MenuLink = ({ href, icon, isActive }: MenuLinkProps) => {
+  return (
+    <Link href={href}>
+      <MenuLinkButton
+        icon={icon}
+        isActive={isActive}
+      />
+    </Link>
+  );
+};
 
-const LogoutMenuLink = () => <MenuLinkButton isActive={false}
-  icon={<ArrowRightOnRectangleIcon fill='white' />} />;
+const LogoutMenuLink = () => {
+  return (
+    <MenuLinkButton
+      icon={<ArrowRightOnRectangleIcon fill="white" />}
+      isActive={false}
+    />
+  );
+};

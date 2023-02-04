@@ -6,5 +6,11 @@ export const authMiddleware = t.middleware(async ({ ctx, next }) => {
   if (!session || session.expires < new Date()) {
     throw new UnauthorizedError();
   }
-  return next({ ctx: { ...ctx, session } });
+
+  return next({
+    ctx: {
+      ...ctx,
+      session,
+    },
+  });
 });
