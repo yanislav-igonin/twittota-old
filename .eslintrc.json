@@ -5,6 +5,10 @@
     "canonical/react",
     "canonical/jsx-a11y",
     "canonical/zod",
-    "canonical/next"
-  ]
+    "canonical/next",
+    "canonical/prettier"
+  ],
+  "rules": {
+    "canonical/filename-match-exported": "off"
+  }
 }
